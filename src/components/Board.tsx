@@ -29,6 +29,18 @@ function Board() {
     ])
   }
 
+  //change le statut d'UNE tâche, sans modifier le tableau existant
+  function handleStatusChange(id: number, status: TaskStatus) {
+    setTasks((previous) =>
+      previous.map((task) => (task.id === id ? { ...task, status } : task)),
+    )
+  }
+
+  //retire une tâche en gardant toutes les autres
+  function handleDeleteTask(id: number) {
+    setTasks((previous) => previous.filter((task) => task.id !== id))
+  }
+
   return (
     <div className="space-y-6">
       <TaskForm onAddTask={handleAddTask} />
@@ -40,7 +52,12 @@ function Board() {
         return (
           <Column key={status} title={title} count={columnTasks.length}>
             {columnTasks.map((task) => (
-              <TaskCard key={task.id} task={task} />
+              <TaskCard
+                key={task.id}
+                task={task}
+                onStatusChange={handleStatusChange}
+                onDelete={handleDeleteTask}
+              />
             ))}
           </Column>
         )
