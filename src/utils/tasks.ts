@@ -28,3 +28,10 @@ export function computeSummary(tasks: Task[]): TasksSummary {
   return { total, done, progress, overdue }
 }
 
+//filtre les tâches par titre 
+  export function filterTasksByTitle(tasks: Task[], query: string): Task[] {
+  const normalizedQuery = query.trim().toLowerCase()
+  if (normalizedQuery === '') return tasks
+  return tasks.filter((task) => task.title.toLowerCase().includes(normalizedQuery))
+}
+

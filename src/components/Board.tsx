@@ -3,6 +3,7 @@ import type { NewTask, Task, TaskStatus } from '../api/types'
 import Column from './Column'
 import TaskCard from './TaskCard'
 import { mockTasks } from '../data/mockTasks'
+import { filterTasksByTitle } from '../utils/tasks'
 import TaskForm from './TaskForm'
 import TaskStats from './TaskStats'
 
@@ -15,6 +16,7 @@ const COLUMNS: { status: TaskStatus; title: string }[] = [
 
 function Board() {
   const [tasks, setTasks] = useState<Task[]>(mockTasks)
+  const [query, setQuery] = useState('')
 
   function handleAddTask(newTask: NewTask) {
     setTasks((previous) => [
@@ -29,6 +31,8 @@ function Board() {
       ...previous,
     ])
   }
+
+  const visibleTasks = filterTasksByTitle(tasks, query)
 
   //change le statut d'UNE tâche, sans modifier le tableau existant
   function handleStatusChange(id: number, status: TaskStatus) {
@@ -47,9 +51,23 @@ function Board() {
       <TaskStats tasks={tasks} />
       <TaskForm onAddTask={handleAddTask} />
 
+      <div>
+        <label htmlFor="task-search" className="sr-only">
+          Rechercher une tâche par titre
+        </label>
+        <input
+          id="task-search"
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Rechercher une tâche par titre…"
+          className="w-full rounded border border-gray-300 bg-white px-3 py-2"
+        />
+      </div>
+
       <div className="grid gap-4 md:grid-cols-3">
       {COLUMNS.map(({ status, title }) => {
-        const columnTasks = tasks.filter((task) => task.status === status)
+        const columnTasks = visibleTasks.filter((task) => task.status === status)
 
         return (
           <Column key={status} title={title} count={columnTasks.length}>
