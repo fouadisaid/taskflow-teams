@@ -10,3 +10,21 @@ export function isOverdue(task: Task): boolean {
   return task.dueDate < today
 }
 
+//la forme du résultat du calcul
+export interface TasksSummary {
+  total: number
+  done: number
+  progress: number
+  overdue: number
+}
+
+//calcule le résumé des tâches
+export function computeSummary(tasks: Task[]): TasksSummary {
+  const total = tasks.length
+  const done = tasks.filter((task) => task.status === 'DONE').length
+  const overdue = tasks.filter(isOverdue).length
+  const progress = total === 0 ? 0 : Math.round((done / total) * 100)
+
+  return { total, done, progress, overdue }
+}
+

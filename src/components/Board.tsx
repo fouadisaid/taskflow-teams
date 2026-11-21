@@ -4,6 +4,7 @@ import Column from './Column'
 import TaskCard from './TaskCard'
 import { mockTasks } from '../data/mockTasks'
 import TaskForm from './TaskForm'
+import TaskStats from './TaskStats'
 
 
 const COLUMNS: { status: TaskStatus; title: string }[] = [
@@ -43,6 +44,7 @@ function Board() {
 
   return (
     <div className="space-y-6">
+      <TaskStats tasks={tasks} />
       <TaskForm onAddTask={handleAddTask} />
 
       <div className="grid gap-4 md:grid-cols-3">
